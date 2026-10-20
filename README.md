@@ -1,68 +1,165 @@
-# Weather-Aware Truck Routing
+# Spotter Weather-Aware Truck Routing
 
-React + Django demo for comparing truck routes using forecasts at each checkpoint's arrival time.
+A full-stack assessment app that compares truck routes by weather risk, load weight, and travel time. Weather is evaluated at each checkpoint's estimated arrival time.
 
-The server gets routes from TomTom and hourly weather from Open-Meteo. The UI shows up to three route options, risks, checkpoint ETAs, and a 0–48 hour map forecast slider.
+**[Live application](https://spotter-weather-routing-sigma.vercel.app/)** · **[Backend health check](https://spotter-weather-routing-s9ez.onrender.com/api/health/)**
 
-> **Important:** This is an assessment demo, not a navigation or dispatch safety system. Always check official weather warnings and road closures. Load weight affects the assessment's wind-risk rules; it does not tell TomTom the vehicle's dimensions or legal gross vehicle weight.
+> **Demo only:** This is not a certified trucking navigation or safety system. Check official forecasts, road closures, and truck restrictions before driving.
 
-## Requirements
+## Reviewer quick start — waking the backend
 
-- Python 3.12 or later (Django 6.1 requires a supported Python version).
-- Node.js 22 or later.
-- A TomTom API key with routing and geocoding permissions.
-- Internet access for TomTom, Open-Meteo, and map tiles.
+The Django API uses **Render Free**, which can spin down after approximately 15 minutes without requests. The first request after inactivity can take **50 seconds or more**. The frontend may load before the backend is ready.
+
+1. Open the **[backend health check](https://spotter-weather-routing-s9ez.onrender.com/api/health/)**.
+2. Wait up to about **1–2 minutes** for a JSON response containing `"status": "ok"`.
+3. Open the **[live application](https://spotter-weather-routing-sigma.vercel.app/)**.
+4. If the app still says **Backend: Disconnected**, refresh it once; the current UI checks connection status on page load.
+5. Generate a route. Avoid repeatedly submitting while the backend is still waking up.
+
+**No Render login or manual redeploy is needed** to wake the service. If the health URL stays unavailable after two minutes, it may be a deployment or provider issue rather than a cold start. The health endpoint confirms Django is available, **not** that weather and routing APIs are healthy.
+
+## Try a trip
+
+| Input              | Suggested value                                   |
+| ------------------ | ------------------------------------------------- |
+| Origin             | Phoenix, AZ                                       |
+| Destination        | Denver, CO                                        |
+| Departure          | Tomorrow, 9:00 AM in the origin's local time zone |
+| Load               | 35,000 lb                                         |
+| Checkpoint spacing | 50 miles                                          |
+
+Generate routes, compare their risk summaries, select an alternative on the map, inspect checkpoints and estimated arrival times, and move the **0–48-hour forecast slider**. Up to three real route alternatives are shown when TomTom supplies enough usable options.
+
+## Features
+
+- TomTom geocoding and routing candidates.
+- Weather checkpoints spaced every 10, 25, or 50 miles.
+- Hourly wind, rain, and snow forecasts evaluated at checkpoint arrival times.
+- Wind-risk adjustments based on load weight.
+- Route ranking by **fewest Severe miles → fewest High miles → lowest average risk → shortest travel time**.
+- Interactive MapLibre map with route lines, checkpoints, ETAs, and a 0–48-hour weather corridor view.
+- **Missing weather remains Unknown**, never Low; incomplete routes are not recommended.
+
+## Architecture
+
+```text
+Browser
+   |
+React + Vite + MapLibre (Vercel)
+   |
+Django REST API (Render)
+   |-- TomTom: geocoding and routing
+   |
+   +-- Cloudflare Worker: authenticated weather gateway
+                 |
+             Open-Meteo: hourly forecasts
+```
+
+The hosted demo uses a Cloudflare Worker for weather requests because calls from Render to the free Open-Meteo endpoint returned HTTP 429. The Worker validates supported request parameters and requires a backend-only bearer token. Provider rate limits can still occur. Django performs the route scoring and recommendations. **The separate Worker's source is not included in this repository.**
 
 ## Run locally
 
-**Backend** (in a terminal, from `backend/`):
+**Requirements:** Python compatible with the pinned Django version (Python 3.12+), Node.js compatible with Vite (Node.js 22+), a TomTom API key, and network access to third-party services.
 
-```bash
-python -m venv .venv
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-# macOS/Linux: source .venv/bin/activate
-python -m pip install -r requirements-dev.txt
-cp .env.example .env  # Windows: Copy-Item .env.example .env
-# Put your real TOMTOM_API_KEY and a local DJANGO_SECRET_KEY in .env
-python manage.py migrate
-python manage.py runserver
+### Django backend — Windows PowerShell
+
+From the repository root:
+
+```powershell
+cd backend
+py -m venv .venv
+Copy-Item .env.example .env
+# Edit .env and set your own TOMTOM_API_KEY and DJANGO_SECRET_KEY
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py runserver
 ```
 
-**Frontend** (in another terminal, from `frontend/`):
+The default `.env.example` configures local debug and localhost CORS. For macOS/Linux, activate the Python environment with `source .venv/bin/activate` and run the Django commands with `python`.
 
-```bash
+### React frontend — second terminal
+
+```powershell
+cd frontend
 npm ci
-cp .env.example .env  # Windows: Copy-Item .env.example .env
+Copy-Item .env.example .env
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`.
+The local frontend `.env` contains:
 
-Use a departure time **in the origin's local time zone**. The date/time input intentionally has no time-zone offset; TomTom resolves the origin's offset. Times shown after routing are formatted in your device's time zone.
-
-## Tests
-
-```bash
-# From project root, with backend dependencies installed:
-PYTHONPATH=backend python -m pytest -q backend/tests backend/scripts/test_smoke_live.py
-
-# From frontend/:
-npm test
-npm run lint
-npm run build
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
 ```
 
-For Windows PowerShell, set `$env:PYTHONPATH='backend'` before running pytest.
+Open http://127.0.0.1:5173/. Enter the departure time in the **origin's local time zone**; the displayed times are formatted in your device's time zone.
 
-The Python unit tests use synthetic provider data and do not spend API quota. `smoke_live.py` is separate and contacts services only when run explicitly with the appropriate server URL.
+### Weather endpoint options
+
+Without `WEATHER_PROXY_URL`, Django calls Open-Meteo directly. To use the hosted gateway, set these in **backend environment only**:
+
+| Variable              | Purpose                                        |
+| --------------------- | ---------------------------------------------- |
+| `WEATHER_PROXY_URL`   | HTTPS Worker URL ending in `/forecast`         |
+| `WEATHER_PROXY_TOKEN` | Bearer token matching the secret in Cloudflare |
+
+Do not put the token or TomTom key in frontend `VITE_` variables or in Git.
+
+## Deployment
+
+### Render — backend
+
+- **Root directory:** `backend`
+- **Build command:** `pip install -r requirements.txt`
+- **Start command:**
+
+```bash
+python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --timeout 120
+```
+
+Environment variables:
+
+| Name                            | Setting                                            |
+| ------------------------------- | -------------------------------------------------- |
+| `DJANGO_DEBUG`                  | `false`                                            |
+| `DJANGO_SECRET_KEY`             | Private random key                                 |
+| `DJANGO_ALLOWED_HOSTS`          | `spotter-weather-routing-s9ez.onrender.com`        |
+| `CORS_ALLOWED_ORIGINS`          | `https://spotter-weather-routing-sigma.vercel.app` |
+| `TOMTOM_API_KEY`                | Private TomTom key                                 |
+| `WEATHER_PROXY_URL`             | Your Worker URL with `/forecast`                   |
+| `WEATHER_PROXY_TOKEN`           | Private Worker bearer token                        |
+| `DJANGO_TRUST_PROXY_SSL_HEADER` | `true` when the trusted Render proxy is configured |
+
+**Important:** The CORS origin must have **no trailing slash**. `DJANGO_ALLOWED_HOSTS` must be the hostname **without `https://`**. Route throttling can be configured using `ROUTES_RATE_PER_MINUTE`, `ROUTES_RATE_PER_DAY`, and `DRF_NUM_PROXIES`.
+
+### Vercel — frontend
+
+- **Root directory:** `frontend`
+- **Framework:** Vite
+- **Install:** `npm ci`
+- **Build:** `npm run build`
+- **Output directory:** `dist`
+- **Environment:**
+
+```env
+VITE_API_BASE_URL=https://spotter-weather-routing-s9ez.onrender.com/api
+```
+
+Only the public URL is exposed to the browser. Keep API keys and tokens server-side.
+
+### Cloudflare Worker — weather gateway
+
+Configure the Worker separately with a private `WEATHER_PROXY_TOKEN` secret. Set the same token and the Worker `/forecast` URL in Render. The gateway restricts requests to the forecast fields this app uses. The Worker implementation must be deployed separately; it is not part of this repository.
 
 ## API
 
-- `GET /api/health/`: backend availability only (not a check of external providers).
-- `POST /api/validate/`: validate trip form inputs.
-- `POST /api/routes/`: calculate routes, forecasts, risks, and a recommendation.
+| Method | Endpoint               | Purpose                                            |
+| ------ | ---------------------- | -------------------------------------------------- |
+| GET    | `/api/health/`         | Django availability                                |
+| POST   | `/api/trips/validate/` | Validate trip input                                |
+| POST   | `/api/routes/`         | Return routes, risk, forecasts, and recommendation |
 
-Example JSON:
+Example route request (use a valid future departure date):
 
 ```json
 {
@@ -74,39 +171,61 @@ Example JSON:
 }
 ```
 
-The backend checks 6 possible routing candidates and displays at most 3. If TomTom has fewer usable routes, the app shows fewer rather than inventing roads. Forecasts outside the available window stay Unknown. A route with any unknown checkpoint cannot be recommended.
+### Weather and risk notes
 
-### Weather sampling
+Wind uses the higher of hourly wind readings around the checkpoint's arrival time. Rain and snow use hourly amounts ending at the following whole hour. The 0–48-hour slider is a separate forecast view; it does not alter the original arrival-time route ranking. Risk comparisons use full-precision values.
 
-- Wind: use the higher of the hourly readings either side of ETA. This is deliberately cautious for an assessment app.
-- Rain and snow: use the hourly accumulation ending at the next whole hour.
-- If a needed sample is missing, leave the checkpoint's weather unknown.
-- Risk checks use full-precision readings; the UI rounds numbers only for display.
-- The slider starts at the next whole UTC hour, independently of route arrival-time risk.
+Wind rules include **No Travel at 55+ mph for any load**, **No Travel at 45–54 mph for loads above 30,000 lb**, and **Severe at 35–44 mph for loads above 40,000 lb**.
 
-### Limits
+## Tests
 
-The synchronous endpoint accepts a maximum of 400 checkpoints across candidate routes. For a long trip, try 25- or 50-mile spacing. It also uses per-IP request throttling (6/minute and 80/day by default). Throttling alone cannot prevent every kind of abuse or API spending. The default IP identification ignores untrusted `X-Forwarded-For` headers (`DRF_NUM_PROXIES=0`); if you deploy behind proxies, configure your trusted proxy chain carefully.
+From `backend/` after installing development dependencies:
 
-## Deploying
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q tests scripts/test_smoke_live.py
+.\.venv\Scripts\python.exe manage.py check
+```
 
-1. Set `DJANGO_DEBUG=false`, a strong `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `TOMTOM_API_KEY`, and `CORS_ALLOWED_ORIGINS` on the **server**. Never put the TomTom key in `VITE_` variables.
-2. Configure TLS and trusted proxy headers for your hosting setup. Run `python manage.py check --deploy` and `python manage.py migrate`.
-3. Start Django with `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT` from `backend/` (Linux hosts). Collect and serve Django static assets separately if using admin.
-4. Run `npm ci && npm run build` in `frontend/`, host `dist/` as static assets, and set `VITE_API_BASE_URL` to your HTTPS backend `/api` URL before building.
-5. **Production throttle warning:** Django's local-memory cache is per process. Use a shared cache (such as Redis) for rate limits on multiple workers/instances, and enforce provider quotas and billing alerts. A full job queue and shared caching are outside this assessment.
-6. Test one short and one long trip on the deployed URL and review the browser console and Django logs.
+From `frontend/`:
 
-Only use `.env.example` files in source control or a submitted ZIP. Store actual secrets in your host's secret manager. If an API key was included in a previously shared archive, rotate it.
+```bash
+npm test
+npm run lint
+npm run build
+```
 
-## Project layout
+Unit tests with synthetic responses do not prove live third-party services will be available.
 
-- `backend/routing/services.py` — TomTom requests and route parsing.
-- `backend/routing/checkpoints.py` — route positions and checkpoint ETAs.
-- `backend/routing/weather_readings.py` — hourly weather and ETA time matching.
-- `backend/routing/weather.py` — forecast batches and the map timeline.
-- `backend/routing/risk.py` — risk rules and route selection.
-- `backend/routing/views.py` — API response and workload limits.
-- `frontend/src/RouteMap.jsx` — MapLibre routes, checkpoints, and slider.
-- `frontend/src/corridorUtils.js` — map corridor segments.
-- `frontend/src/tripRequest.js` — form and response validation.
+## Known limitations
+
+- Render Free may need roughly a minute or longer to wake after inactivity.
+- Django's health check is not a TomTom or Open-Meteo availability check.
+- External APIs can rate-limit or fail; missing forecasts remain Unknown.
+- The app displays fewer than three routes when the routing provider has too few usable alternatives.
+- Forecasts are hourly approximations and cannot guarantee safe roads.
+- SQLite files on Render Free's ephemeral filesystem are not a persistent production datastore.
+- Django processes route planning synchronously and enforces workload/request limits.
+- The current React backend-status indicator checks at page load, so a refresh may be needed after waking Render.
+- This is a demonstration, not a production dispatch system or a source of official road warnings.
+
+## Code layout
+
+| File                                  | Responsibility                        |
+| ------------------------------------- | ------------------------------------- |
+| `backend/routing/services.py`         | TomTom routing and route parsing      |
+| `backend/routing/checkpoints.py`      | Checkpoint distances and ETAs         |
+| `backend/routing/weather_readings.py` | Hourly forecasts at arrival times     |
+| `backend/routing/weather.py`          | Forecast batching and slider data     |
+| `backend/routing/risk.py`             | Risk classification and route ranking |
+| `backend/routing/views.py`            | REST endpoints and input limits       |
+| `frontend/src/RouteMap.jsx`           | Map, routes, checkpoints, slider      |
+| `frontend/src/corridorUtils.js`       | Weather corridor geometry             |
+| `frontend/src/tripRequest.js`         | Request and response validation       |
+
+## Assessment deliverables
+
+- **Code:** this GitHub repository
+- **Hosted demo:** https://spotter-weather-routing-sigma.vercel.app/
+- **Loom walkthrough:** pending recording
+
+Only commit `.env.example` templates. Never commit `.env` files, secret keys, virtual environments, or `node_modules`.
