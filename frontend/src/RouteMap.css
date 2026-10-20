@@ -1,0 +1,315 @@
+/* Step 2: Map risk legend and checkpoint popup styles. */
+.route-map-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map-risk-legend {
+  position: absolute;
+  z-index: 3;
+  bottom: 12px;
+  left: 12px;
+  max-width: min(440px, calc(100% - 24px));
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.1);
+  padding: 11px 13px;
+  color: #18313d;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.map-risk-legend-title {
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+.map-risk-legend-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.map-risk-legend-item,
+.map-route-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.map-risk-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.map-route-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.map-line {
+  display: inline-block;
+  width: 22px;
+  height: 0;
+  border-top: 4px solid;
+}
+
+.map-line.selected {
+  border-color: #475569;
+  border-top-width: 6px;
+}
+
+.map-line.recommended {
+  border-color: #16a34a;
+  border-top-style: dashed;
+}
+
+.checkpoint-popup {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #18313d;
+  min-width: 190px;
+}
+
+.checkpoint-popup-title {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.checkpoint-popup-risk {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+  .map-risk-legend {
+    padding: 8px;
+    font-size: 11px;
+  }
+}
+
+/* Step 3: Hourly weather-risk corridor heatmap controls. */
+.map-forecast-panel {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  left: 12px;
+  width: min(340px, calc(100% - 75px));
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.12);
+  color: #18313d;
+  font-size: 12px;
+}
+.map-forecast-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.map-forecast-top strong {
+  font-size: 14px;
+}
+.map-forecast-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.map-forecast-time {
+  display: block;
+  margin: 10px 0 4px;
+  font-weight: 600;
+}
+.map-forecast-panel input[type="range"] {
+  width: 100%;
+  accent-color: #087c8c;
+  cursor: pointer;
+}
+.map-forecast-range {
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+}
+.map-forecast-note {
+  margin: 9px 0 0;
+  color: #475569;
+  line-height: 1.4;
+}
+.map-forecast-missing {
+  margin: 8px 0 0;
+  color: #9a3412;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .map-forecast-panel {
+    padding: 9px;
+    font-size: 11px;
+  }
+  .map-forecast-top strong {
+    font-size: 12px;
+  }
+}
+
+.map-forecast-about {
+  margin-top: 8px;
+}
+.map-forecast-about summary {
+  cursor: pointer;
+  color: #087c8c;
+  font-weight: 600;
+}
+.map-forecast-about summary:focus-visible {
+  outline: 2px solid #087c8c;
+  outline-offset: 2px;
+}
+
+/* F4: map controls remain readable without covering the driving corridor on
+   narrow screens, including when the forecast info details are expanded. */
+@media (max-width: 720px) {
+  .route-map-frame {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+  .route-map {
+    order: 0;
+    flex: 0 0 auto;
+    width: 100%;
+    height: 360px;
+    min-height: 360px;
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .map-forecast-panel,
+  .map-risk-legend {
+    position: static;
+    z-index: auto;
+    order: 1;
+    width: 100%;
+    max-width: none;
+    flex: 0 0 auto;
+    padding: 12px;
+    box-shadow: none;
+    font-size: 12px;
+    pointer-events: auto;
+  }
+  .map-risk-legend {
+    order: 2;
+  }
+  .map-forecast-top strong {
+    font-size: 14px;
+  }
+  .map-forecast-panel input[type="range"] {
+    min-height: 28px;
+  }
+  .map-forecast-toggle input {
+    width: 18px;
+    height: 18px;
+  }
+  .map-risk-legend-levels {
+    gap: 8px 10px;
+  }
+  .map-risk-legend-item {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 420px) {
+  .route-map {
+    height: 320px;
+    min-height: 320px;
+  }
+}
+
+/* Weather forecast rings are intentionally distinct from ETA checkpoint dots:
+   the outer ring follows the time slider, while the small dot shows ETA risk. */
+.map-weather-marker-guide {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid #e2e8f0;
+  line-height: 1.4;
+  color: #475569;
+  font-size: 11px;
+}
+.map-forecast-ring-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  border: 2px solid #64748b;
+  border-radius: 50%;
+  background: rgba(22, 163, 74, 0.45);
+  box-shadow: 0 0 0 3px #ffffff;
+}
+.map-forecast-ring-key > span {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+/* F8: a checkpoint popup explicitly compares the two different weather times. */
+.checkpoint-popup-section {
+  padding: 9px 0;
+  border-top: 1px solid #e2e8f0;
+}
+.checkpoint-popup-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+.checkpoint-popup-section-header > strong {
+  font-size: 13px;
+}
+.checkpoint-popup-level {
+  flex-shrink: 0;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 12px;
+  background: #f1f5f9;
+}
+.checkpoint-popup-note {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.map-error {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  right: 3.5rem;
+  padding: 0.6rem;
+  background: #fff;
+  color: #991b1b;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  z-index: 3;
+}

@@ -1,0 +1,7 @@
+# Versions used for this project. Install in a Python 3.12+ virtual environment.
+Django==6.1.2
+djangorestframework==3.18.1
+django-cors-headers==4.9.0
+python-dotenv==1.2.1
+requests==2.32.5
+gunicorn==23.0.0

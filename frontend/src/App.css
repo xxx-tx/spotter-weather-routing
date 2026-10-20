@@ -1,0 +1,1187 @@
+/* ==========================
+   Application Layout
+========================== */
+
+.app {
+  min-height: 100vh;
+  width: 100%;
+  background: #f3f6f9;
+}
+
+.app-header {
+  background: #103b47;
+  color: white;
+  padding: 20px 32px;
+}
+
+.header-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-icon {
+  font-size: 32px;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.logo p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #c4dce2;
+}
+
+.backend-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #e2e8f0;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+.backend-status.connected .status-dot {
+  background: #22c55e;
+}
+
+/* ==========================
+   Main Content
+========================== */
+
+.app-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 28px 32px;
+
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 24px;
+
+  align-items: start;
+}
+
+.sidebar,
+.main-content {
+  min-width: 0;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================
+   Cards
+========================== */
+
+.form-card,
+.map-card,
+.routes-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.form-card h2,
+.map-card h2,
+.routes-section h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #18313d;
+}
+
+.form-description {
+  margin: 10px 0 24px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ==========================
+   Trip Form
+========================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-group input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 10px 12px;
+
+  font-size: 14px;
+  color: #1e293b;
+  background: #ffffff;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #087c8c;
+  box-shadow: 0 0 0 3px rgba(8, 124, 140, 0.1);
+}
+
+.form-group small {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 16px;
+  margin-top: 8px;
+
+  background: #087c8c;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 7px;
+
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: background 0.2s;
+}
+
+.submit-button:hover {
+  background: #066879;
+}
+
+.submit-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ==========================
+   Error and Trip Summary
+========================== */
+
+.error-message {
+  margin-top: 20px;
+  padding: 14px;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.error-message p {
+  margin: 8px 0 0;
+}
+
+.trip-summary {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.trip-summary h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  color: #18313d;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13px;
+}
+
+.summary-row span {
+  flex-shrink: 0;
+  color: #64748b;
+}
+
+.summary-row strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+  color: #334155;
+}
+
+/* ==========================
+   Map Section
+========================== */
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.route-count {
+  padding: 7px 12px;
+  background: #ecf8fa;
+  color: #087c8c;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #e5edf1;
+}
+
+/* An accessible, correctly sized placeholder while the MapLibre bundle loads.
+   The map remains automatic; no additional user action is required. */
+.map-module-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  color: #334155;
+  font-size: 14px;
+  background: #e5edf1;
+}
+
+/* Critical: MapLibre must have a sized container. */
+.route-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+}
+
+.map-hint {
+  margin: 14px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ==========================
+   Route Cards
+========================== */
+
+.route-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.route-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  width: 100%;
+  margin: 0;
+  padding: 18px;
+
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+
+  color: #18313d;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.route-card:hover {
+  border-color: #93c5d0;
+  background: #f8fcfd;
+}
+
+.route-card.selected {
+  border-color: #087c8c;
+  background: #effbfc;
+  box-shadow: 0 2px 8px rgba(8, 124, 140, 0.1);
+}
+
+.route-card-header {
+  min-height: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-name {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+}
+
+.route-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fastest-badge {
+  background: #e2e8f0;
+  color: #334155;
+
+  padding: 5px 8px;
+  border-radius: 5px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.route-card-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.route-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.route-stat strong {
+  font-size: 17px;
+  color: #0f2937;
+}
+
+.route-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+
+  font-size: 12px;
+  color: #64748b;
+}
+
+.selected-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #087c8c;
+}
+
+/* ==========================
+   Selected Route Summary
+========================== */
+
+.weather-notice {
+  margin-top: 18px;
+  padding: 12px 14px;
+
+  border-left: 3px solid #eab308;
+  background: #fefce8;
+
+  color: #854d0e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ==========================
+   Responsive Layout
+========================== */
+
+@media (max-width: 900px) {
+  .app-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-header {
+    padding: 18px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  .app-container {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .form-card,
+  .map-card,
+  .routes-section {
+    padding: 16px;
+  }
+
+  .map-wrapper {
+    height: 380px;
+    min-height: 380px;
+  }
+
+  .route-map {
+    min-height: 380px;
+  }
+
+  .route-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================
+   Step 4: Checkpoint Spacing
+========================== */
+
+.form-group select {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 10px 12px;
+
+  color: #1e293b;
+  background: #ffffff;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #087c8c;
+  box-shadow: 0 0 0 3px rgba(8, 124, 140, 0.1);
+}
+
+/* ==========================
+   Checkpoint List
+========================== */
+
+.checkpoints-panel {
+  margin-top: 24px;
+  padding: 20px;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.checkpoints-panel h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #18313d;
+}
+
+.checkpoints-description {
+  margin: 8px 0 18px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.checkpoint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.checkpoint-item {
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.checkpoint-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 10px;
+}
+
+.checkpoint-top strong {
+  font-size: 14px;
+  color: #18313d;
+}
+
+.checkpoint-top span {
+  font-size: 12px;
+  color: #64748b;
+  text-align: right;
+}
+
+.checkpoint-weather {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.checkpoint-weather span {
+  font-size: 12px;
+  color: #475569;
+}
+
+.checkpoint-unavailable {
+  font-size: 12px;
+  color: #b45309;
+}
+
+.weather-warning {
+  margin-top: 16px;
+  padding: 14px;
+
+  border-radius: 8px;
+  border: 1px solid #fcd34d;
+
+  background: #fffbeb;
+  color: #92400e;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width: 600px) {
+  .checkpoints-panel {
+    padding: 14px;
+  }
+
+  .checkpoint-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .checkpoint-top span {
+    text-align: left;
+  }
+}
+
+/* ==========================
+   Risk chips and route comparison
+========================== */
+
+.risk-chip,
+.checkpoint-top .risk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--chip-color) 12%, white);
+  color: var(--chip-color);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.risk-chip-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--chip-color);
+  flex-shrink: 0;
+}
+
+.route-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.recommended-badge {
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: #087c8c;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.route-card:focus-visible {
+  outline: 3px solid #087c8c;
+  outline-offset: 2px;
+}
+
+.route-card-risk {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-card-risk-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.route-card-risk-miles {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.risk-bar {
+  display: flex;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.risk-bar-segment {
+  display: block;
+  height: 100%;
+}
+
+/* ==========================
+   Selected route details
+========================== */
+
+.route-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+.route-details .checkpoints-panel {
+  margin-top: 0;
+}
+
+.risk-summary {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.risk-summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.risk-summary-head h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #18313d;
+}
+
+.verdict {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.verdict p {
+  margin: 4px 0 0;
+}
+
+.verdict-good {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.verdict-bad {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.verdict-warn {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.verdict-neutral {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.ranking-explainer {
+  margin-top: 16px;
+  border: 1px solid #dbe4ec;
+  border-radius: 8px;
+  padding: 14px;
+  background: #f8fafc;
+}
+
+.ranking-explainer summary {
+  cursor: pointer;
+  color: #18313d;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 4px;
+}
+
+.ranking-explainer summary strong {
+  font-weight: 700;
+}
+
+.ranking-explainer summary span {
+  display: block;
+  color: #475569;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.ranking-explainer summary:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 3px;
+}
+
+.ranking-explainer[open] > p:first-of-type {
+  margin-top: 12px;
+}
+
+.ranking-explainer > p {
+  margin: 0;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.ranking-priorities {
+  display: grid;
+  gap: 6px;
+  padding-left: 21px;
+  margin: 10px 0;
+}
+
+.ranking-priorities li {
+  font-size: 12px;
+  color: #334155;
+  padding-left: 3px;
+}
+
+.ranking-priorities li strong {
+  display: block;
+  font-weight: 700;
+}
+
+.ranking-priorities li span {
+  display: block;
+  color: #64748b;
+}
+
+.ranking-explainer .ranking-footnote {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.risk-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+.risk-metrics div {
+  padding: 10px 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.risk-metrics dt {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.risk-metrics dd {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f2937;
+}
+
+.risk-status {
+  margin: 14px 0 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.risk-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.risk-breakdown li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.risk-breakdown-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.risk-breakdown .risk-chip-dot {
+  width: 10px;
+  height: 10px;
+}
+
+.checkpoint-list {
+  margin: 0;
+  padding: 0 6px 0 0;
+  list-style: none;
+}
+
+.checkpoint-eta {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.checkpoint-top {
+  margin-bottom: 4px;
+}
+
+.checkpoint-reason {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #475569;
+}
+
+/* ==========================
+   Map loading overlay
+========================== */
+
+.map-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(243, 246, 249, 0.82);
+  color: #18313d;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #b6d3da;
+  border-top-color: #087c8c;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
+  }
+}
+
+@media (max-width: 1100px) {
+  .route-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reliable trip request controls and B5 route-availability warning. */
+.cancel-button {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #94a3b8;
+  border-radius: 7px;
+  background: #fff;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cancel-button:hover {
+  background: #f1f5f9;
+}
+.cancel-button:focus-visible {
+  outline: 3px solid #087c8c;
+  outline-offset: 2px;
+}
+.route-warning {
+  margin: 16px 0 0;
+  padding: 12px;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* F4: clear progress feedback, keyboard targets, and dense-checkpoint summaries. */
+.map-loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 360px;
+  line-height: 1.5;
+}
+.map-loading-content strong {
+  font-size: 17px;
+}
+.map-loading-content > span:not(.spinner) {
+  font-weight: 400;
+}
+.map-cancel-button {
+  min-height: 44px;
+  padding: 10px 24px;
+  margin-top: 4px;
+  background: #fff;
+  border: 1px solid #64748b;
+  border-radius: 8px;
+  color: #18313d;
+  font-weight: 700;
+}
+.map-cancel-button:hover {
+  background: #ecf8fa;
+}
+.map-cancel-button:focus-visible,
+.checkpoint-expand-button:focus-visible {
+  outline: 3px solid #087c8c;
+  outline-offset: 3px;
+}
+.checkpoint-preview-count {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: #475569;
+}
+.checkpoint-expand-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: 1px solid #94a3b8;
+  background: #f8fafc;
+  color: #075c6c;
+  font-size: 13px;
+  font-weight: 700;
+}
+.checkpoint-expand-button:hover {
+  background: #ecf8fa;
+}
+.checkpoint-list-expanded {
+  max-height: 440px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.checkpoint-list:not(.checkpoint-list-expanded) {
+  max-height: none;
+  overflow: visible;
+}
+.route-name,
+.route-name strong,
+.route-card,
+.route-card-risk {
+  min-width: 0;
+}
+.route-name strong {
+  overflow-wrap: anywhere;
+}
+.route-card-header,
+.section-header {
+  flex-wrap: wrap;
+}
+
+/* On narrow screens the map must remain usable. Weather controls and risk
+   legend become panels BELOW the canvas, never competing for map pixels. */
+@media (max-width: 720px) {
+  .app-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .map-wrapper {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  .route-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .route-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .map-loading {
+    align-items: flex-start;
+    padding-top: 100px;
+  }
+  .map-loading-content {
+    margin: 0 auto;
+  }
+  .route-card-header {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 420px) {
+  .logo h1 {
+    font-size: 18px;
+  }
+  .app-container {
+    padding: 10px;
+  }
+  .form-card,
+  .map-card,
+  .routes-section {
+    padding: 12px;
+  }
+  .checkpoint-item {
+    padding: 11px;
+  }
+  .risk-metrics {
+    gap: 8px;
+  }
+  .route-card {
+    padding: 14px;
+  }
+  .map-loading {
+    padding: 48px 14px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+  .route-card,
+  .form-group input,
+  .submit-button {
+    transition: none;
+  }
+}
+
+/* Trip times are absolute UTC-offset timestamps displayed in device-local time.
+   Make the UI's time zone choice visible so drivers do not confuse it with the
+   departure's origin-local clock or the destination's clock. */
+.time-zone-notice {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #475569;
+  max-width: 85ch;
+}
