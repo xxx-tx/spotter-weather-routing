@@ -1,5 +1,5 @@
 """Fetch weather for checkpoints and the map forecast slider."""
-
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import logging
@@ -59,7 +59,25 @@ def fetch_weather_batch(coordinates, coordinate_groups, heatmap_timestamps=None,
         "timeformat": "unixtime",
         "forecast_days": forecast_days,
     }
-    response = requests.get(WEATHER_URL, params=params, timeout=30)
+
+    proxy_url = os.getenv("WEATHER_PROXY_URL", "").strip()
+    headers = {"Accept": "application/json"}
+
+    if proxy_url:
+        token = os.getenv("WEATHER_PROXY_TOKEN", "").strip()
+
+        if not token:
+            raise ValueError("WEATHER_PROXY_TOKEN is missing")
+
+        headers["Authorization"] = f"Bearer {token}"
+
+    response = requests.get(
+        proxy_url or WEATHER_URL,
+        params=params,
+        headers=headers,
+        timeout=30,
+    )
+    
     response.raise_for_status()
     data = response.json()
     if isinstance(data, dict):
