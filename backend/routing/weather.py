@@ -16,7 +16,7 @@ from .forecast_window import FORECAST_DAYS, HEATMAP_EXTRA_HOURS
 logger = logging.getLogger(__name__)
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
 BATCH_SIZE = 25
-MAX_WORKERS = 3
+MAX_WORKERS = 1
 FORECAST_HOURS = HEATMAP_EXTRA_HOURS + 1
 
 

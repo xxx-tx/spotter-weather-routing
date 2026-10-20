@@ -72,7 +72,9 @@ CSRF_COOKIE_SECURE = not DEBUG
 # Application definition
 
 REST_FRAMEWORK = {
-    # Do not trust client-supplied X-Forwarded-For headers by default.
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
     "NUM_PROXIES": env_nonnegative_int("DRF_NUM_PROXIES", 0),
     "DEFAULT_THROTTLE_RATES": {
         "routes_minute": os.getenv("ROUTES_RATE_PER_MINUTE", "6/min"),
