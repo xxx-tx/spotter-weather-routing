@@ -226,6 +226,4 @@ Unit tests with synthetic responses do not prove live third-party services will 
 
 - **Code:** this GitHub repository
 - **Hosted demo:** https://spotter-weather-routing-sigma.vercel.app/
-- **Loom walkthrough:** pending recording
-
-Only commit `.env.example` templates. Never commit `.env` files, secret keys, virtual environments, or `node_modules`.
+- **Loom walkthrough:** https://www.loom.com/share/e88949441114480497741ff86e4c9a7b
